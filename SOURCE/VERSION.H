@@ -1,0 +1,16 @@
+#define SPEAR
+#define GOODTIMES
+//#define ARTSEXTERN
+#define DEMOSEXTERN
+#define CARMACIZED
+#define WEAPONC
+#define USE_FLATS
+#define EXTRAHLTH
+//#define FPSCOUNT
+#define CHECKLINE20
+#define USE_SHADE
+#define NEEDLE
+//#define NEEDLEDEMO
+//#define PRESTOBUILD
+#define PLANE4SHIT
+//#define OLDEXIT
