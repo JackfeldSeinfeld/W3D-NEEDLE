@@ -10,7 +10,6 @@
 #define CHECKLINE20
 #define USE_SHADE
 #define NEEDLE
-//#define NEEDLEDEMO
-//#define PRESTOBUILD
+#define NEEDLEDEMO
 #define PLANE4SHIT
 //#define OLDEXIT
