@@ -393,11 +393,23 @@ void A_Bleed (objtype *ob)
 	new->flags = FL_NEVERMARK;
 }
 
+#if NOTVER > 0
+boolean CheckIfBoss (objtype *ob)
+{
+    if (ob->is_boss == true) return 1;
+    return 0;
+}
+#endif
+
 void A_Explode (objtype *ob)
 {
 	objtype *op;
 	long dist;
+#ifndef UZISFIXES
 	int damage;
+#else
+    byte damage;
+#endif
 
 	madenoise = true;
 	dist = sqrt(pow(player->x-ob->x,2)+pow(player->y-ob->y,2));
@@ -410,6 +422,8 @@ void A_Explode (objtype *ob)
 			TakeDamage(damage,ob);
 		}
 	for (op = player->next; op; op = op->next)
+	{
+	#if NOTVER == 0
 		if (op->flags & FL_SHOOTABLE && !op->flags & FL_BOSS )
 		{
 			dist = sqrt(pow(op->x-ob->x,2)+pow(op->y-ob->y,2));
@@ -422,6 +436,27 @@ void A_Explode (objtype *ob)
 					DamageActor(op,damage);
 				}
 		}
+	#else
+        if (op->flags & FL_SHOOTABLE)
+ 		{
+            // Is it a boss?
+            if (!CheckIfBoss(op)) // If not, then kick their ass!!
+            {
+			dist = sqrt(pow(op->x-ob->x,2)+pow(op->y-ob->y,2));
+			if (dist < (TILEGLOBAL*4))
+				if (CheckLine2(op,ob))
+				{
+					damage = (int)((double)100 / pow(((double)dist / (double)TILEGLOBAL),2));
+					if (damage > 130)
+						damage = 130;
+					DamageActor(op,damage);
+				}
+            }
+            else // Otherwise... Assume the worst :3
+            	return; // trolololololololololololololo!!!!!!!
+		}
+	#endif
+    }
 }
 
 //
@@ -676,7 +711,12 @@ void T_Projectile (objtype *ob)
                 if (deltax < BJROCKETSIZE && deltay < BJROCKETSIZE)
                 {
                     ob->state = &s_boom1;
+#if NOTVER == 0
                     DamageActor (check, 150);
+#else
+                    if (!CheckIfBoss(check))
+                       DamageActor (check, 150);
+#endif
                     return;
                 }
             }
@@ -3499,7 +3539,12 @@ void SpawnBoss (enemy_t which, int tilex, int tiley)
 	new->obclass = guardobj+which;
 	new->hitpoints = starthitpoints[gamestate.difficulty][which];
 	new->dir = nodir;
+#if NOTVER == 0
 	new->flags |= FL_SHOOTABLE|FL_AMBUSH|FL_BOSS;
+#else
+	new->flags |= FL_SHOOTABLE|FL_AMBUSH;
+	new->is_boss = true;
+#endif
    new->speed = SPDPATROL;
    if (!loadedgame)
         gamestate.killtotal++;

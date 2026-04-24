@@ -203,7 +203,7 @@ void ScanInfoPlane (void)
 
 			switch (tile)
 			{
-#ifndef NEEDLEDEMO
+#if NOTVER > 0
 			case 1:
 			case 2:
 			case 3:

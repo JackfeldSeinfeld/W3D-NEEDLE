@@ -9,6 +9,10 @@
 
 #include "WL_MENU.H"
 
+#ifdef NEEDLE
+#include "NOTDEFS.H"
+#endif
+
 #ifdef SPANISH
 #include "SPANISH.H"
 #else
@@ -87,6 +91,11 @@ byte far *GetShade (int height);
 #define ELEVATORTILE	21
 #define AMBUSHTILE		106
 #define	ALTELEVATORTILE	107
+#ifdef NEEDLE
+#if NOTVER > 0
+#define SWITCHTILE 73
+#endif
+#endif
 
 #define NUMBERCHARS	9
 
@@ -180,8 +189,9 @@ byte far *GetShade (int height);
 #define FL_DIRSOUTH 16
 #define FL_DIREAST 32
 
+#if NOTVER == 0
 #define FL_BOSS 32
-
+#endif
 
 //
 // sprite constants
@@ -773,6 +783,10 @@ typedef struct objstruct
 	long		speed;
 
 	byte		temp1,temp2;
+#if NOTVER > 0
+	boolean     is_boss;
+#endif
+	
 	struct		objstruct	*next,*prev;
 } objtype;
 
@@ -861,6 +875,9 @@ typedef	struct
 	long		killx,killy;
 #endif
 	boolean		victoryflag;		// set during victory animations
+#if NOTVER > 0
+    boolean		electricity;
+#endif
 	char		*message;
 } gametype;
 
@@ -923,11 +940,6 @@ extern	long	heightnumerator;
 extern	int		minheightdiv;
 
 extern	char	configname[13];
-#ifndef NEEDLEDEMO
-extern  char	hiscorname[13];
-#endif
-
-
 
 void		HelpScreens (void);
 void		OrderingInfo (void);

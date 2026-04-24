@@ -440,6 +440,7 @@ void US_ControlPanel(byte scancode)
 		//
 		// EASTER EGG FOR SPEAR OF DESTINY!
 		//
+#if NOTVER == 0
 		if (Keyboard[sc_M] && Keyboard[sc_D] && (MS_CheckParm("uziwashere") && MS_CheckParm("bruhnami")))
 		{
 			VW_FadeOut();
@@ -476,6 +477,7 @@ void US_ControlPanel(byte scancode)
 			StartCPMusic (MENUSONG);
 			MenuFadeIn();
 		}
+#endif
 #endif
 
 		switch(which)
@@ -3962,6 +3964,7 @@ void CheckForEpisodes(void)
 #ifdef SPEAR
 
 #ifdef NEEDLE
+#if NOTVER == 0
 #ifndef NEEDLEDEMO
 	if (!findfirst("*.NOT",&f,FA_ARCH))
 	{
@@ -3976,6 +3979,14 @@ void CheckForEpisodes(void)
 	}
 	else
 		Quit("NO NEEDLE OF TEARS DEMO FILES TO BE FOUND!\nWHY WOULD YOU DO THAT!?");
+#endif
+#else
+	if (!findfirst("*."NOTEXT,&f,FA_ARCH))
+	{
+		strcpy(extension,NOTEXT);
+	}
+	else
+		Quit("NO NEEDLE OF TEARS DATA FILES TO BE FOUND!");
 #endif
 #else
 
@@ -4006,9 +4017,6 @@ void CheckForEpisodes(void)
 #endif
 
 	strcat(configname,extension);
-#ifndef NEEDLEDEMO
-	strcat(hiscorname,extension);
-#endif
 	strcat(SaveName,extension);
 	strcat(PageFileName,extension);
 	strcat(demoname,extension);

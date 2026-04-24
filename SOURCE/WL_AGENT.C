@@ -1313,13 +1313,44 @@ void Cmd_Use (void)
 		SD_PlaySound (LEVELDONESND);
 		SD_WaitSoundDone();
 	}
+#if NOTVER > 0
+	else if (!buttonheld[bt_use] && (doornum == SWITCHTILE || doornum == SWITCHTILE+1) && elevatorok) // if you want the switch to be on both sides of the wall, remove the "&& elevatorok" part
+	{
+	//
+	// use switch
+	//
+		buttonheld[bt_use] = true;
+
+		if (doornum==SWITCHTILE)
+		{
+		tilemap[checkx][checky]++;		// flip switch
+		}
+		else
+		{
+		tilemap[checkx][checky]--;		// flip switch
+		}
+		gamestate.electricity^=1;	// instead of using this. This one changes from the actual state to the second one, the others change to on, when switch is in position A, off when in position B
+		SD_PlaySound (LEVELDONESND);
+		SD_WaitSoundDone();
+	}
+
+#endif
 	else if (!buttonheld[bt_use] && doornum & 0x80)
 	{
 		buttonheld[bt_use] = true;
 		OperateDoor (doornum & ~0x80);
 	}
+#ifdef NEEDLEDEMO
+#ifndef UZISFIXES
 	else
 		SD_PlaySound (DONOTHINGSND);
+#endif
+#else
+#ifndef NEEDLE
+	else
+		SD_PlaySound (DONOTHINGSND);
+#endif
+#endif
 
 }
 

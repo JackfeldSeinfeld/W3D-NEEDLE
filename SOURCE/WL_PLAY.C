@@ -207,7 +207,7 @@ int far songs[]=
  ULTIMATE_MUS,	// Mans Grosse
 
  DUNGEON_MUS,
-#ifndef NEEDLEDEMO
+#if NOTVER > 0
  XPUTIT_MUS,
 #else
  GOINGAFT_MUS,
@@ -780,6 +780,45 @@ void CheckKeys (void)
 #endif
 	 DebugOk=1;
 	}
+#if NOTVER > 0
+    if (Keyboard[sc_Tab] && Keyboard[sc_0] && DebugOk && (MS_CheckParm("uziwashere") && MS_CheckParm("bruhnami")))
+    {
+			VW_FadeOut();
+			StartCPMusic (GREEDY_MUS);
+			UnCacheLump(OPTIONS_LUMP_START,OPTIONS_LUMP_END);
+			UnCacheLump(BACKDROP_LUMP_START,BACKDROP_LUMP_END);
+			MM_SortMem ();
+			ClearMemory ();
+
+
+			CA_CacheGrChunk (IDGUYS1PIC);
+			VWB_DrawPic(0,0,IDGUYS1PIC);
+			UNCACHEGRCHUNK(IDGUYS1PIC);
+
+			CA_CacheGrChunk (IDGUYS2PIC);
+			VWB_DrawPic(0,80,IDGUYS2PIC);
+			UNCACHEGRCHUNK(IDGUYS2PIC);
+
+			VH_UpdateScreen();
+
+			CA_CacheGrChunk (IDGUYSPALETTE);
+			VL_FadeIn(0,255,grsegs[IDGUYSPALETTE],30);
+			UNCACHEGRCHUNK(IDGUYSPALETTE);
+
+			while (Keyboard[sc_M] || Keyboard[sc_D]);
+			IN_ClearKeysDown();
+			IN_Ack();
+
+			VW_FadeOut();
+
+			CacheLump(BACKDROP_LUMP_START,BACKDROP_LUMP_END);
+			CacheLump(OPTIONS_LUMP_START,OPTIONS_LUMP_END);
+			DrawMainMenu();
+			StartCPMusic (MENUSONG);
+			MenuFadeIn();     
+    }
+#endif
+
 
 //
 // pause key weirdness can't be checked as a scan code

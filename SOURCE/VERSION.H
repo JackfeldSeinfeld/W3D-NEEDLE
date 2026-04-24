@@ -6,10 +6,11 @@
 #define WEAPONC
 #define USE_FLATS
 #define EXTRAHLTH
-//#define FPSCOUNT
+#define FPSCOUNT
 #define CHECKLINE20
 #define USE_SHADE
 #define NEEDLE
 #define NEEDLEDEMO
+#define UZISFIXES
 #define PLANE4SHIT
 //#define OLDEXIT

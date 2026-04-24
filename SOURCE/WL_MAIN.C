@@ -68,10 +68,6 @@ boolean         startgame,loadedgame;
 int             mouseadjustment;
 
 char	configname[13]="CONFIG.";
-#ifndef NEEDLEDEMO
-char	hiscorname[13]="HISCORE.";
-#endif
-
 
 /*
 =============================================================================
@@ -104,7 +100,9 @@ void ReadConfig(void)
 	// valid config file
 	//
 #ifdef NEEDLEDEMO
+#ifndef UZISFIXES
 		read(file,Scores,sizeof(HighScore) * MaxScores);
+#endif
 #endif
 
 		read(file,&sd,sizeof(sd));
@@ -213,7 +211,9 @@ void WriteConfig(void)
 	if (file != -1)
 	{
 #ifdef NEEDLEDEMO
+#ifndef UZISFIXES
 		write(file,Scores,sizeof(HighScore) * MaxScores);
+#endif
 #endif
 
 		write(file,&SoundMode,sizeof(SoundMode));
@@ -241,54 +241,6 @@ void WriteConfig(void)
 		close(file);
 	}
 }
-
-#ifndef NEEDLEDEMO
-
-/*
-====================
-=
-= ReadConfig
-=
-====================
-*/
-
-void ReadHiScore(void)
-{
-	int                     file;
-
-	if ( (file = open(hiscorname,O_BINARY | O_RDONLY)) != -1)
-	{
-		read(file,Scores,sizeof(HighScore) * MaxScores);
-
-		close(file);
-	}
-}
-
-
-/*
-====================
-=
-= WriteConfig
-=
-====================
-*/
-
-void WriteHiScore(void)
-{
-	int                     file;
-
-	file = open(hiscorname,O_CREAT | O_BINARY | O_WRONLY,
-				S_IREAD | S_IWRITE | S_IFREG);
-
-	if (file != -1)
-	{
-		write(file,Scores,sizeof(HighScore) * MaxScores);
-
-		close(file);
-	}
-}
-
-#endif
 
 //===========================================================================
 
@@ -364,6 +316,9 @@ void NewGame (int difficulty,int episode)
 	gamestate.maxrockets = 50;
 	gamestate.nextextra = EXTRAPOINTS;
 	gamestate.episode=episode;
+#ifdef UZISFIXES
+    gamestate.fuel = gamestate.rockets = 0;
+#endif
 
 	startgame = true;
     if (!godflag)

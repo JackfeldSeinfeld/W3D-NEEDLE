@@ -1626,11 +1626,13 @@ boolean SightPlayer (objtype *ob)
 				return false;
 			ob->flags &= ~FL_AMBUSH;
 		}
+#if NOTVER == 0
 		else if (ob->flags & FL_BOSS)
 		{
 			if (!CheckSight (ob))
 				return false;
 		}
+#endif
 		else
 		{
 			if (!madenoise && !CheckSight (ob))
